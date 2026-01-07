@@ -1,0 +1,13 @@
+#!/bin/bash
+
+while read -r line;do
+ 	[ -z "$line" ] && break
+ 	ip=$(echo "$line" | awk '{print $1}')
+ 	name=$(echo "$line" | awk '{print $2}')
+ 	check=$(nslookup $name 8.8.8.8 | awk '/^Address: / {print $2}')
+	echo $check
+ 	[ "$ip" = "$check" ] && echo "IP Address matches" || echo "Bogus IP for {$name} in /etc/hosts!"
+done 
+
+exit 0
+
