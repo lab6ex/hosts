@@ -1,14 +1,21 @@
 #!/bin/bash
 
-nume_host=$1
-adresa=$2
-server_DNS=$3
-verificare=$(nslookup $nume_host $server_DNS | awk 'BEGIN {gasit=0} /^Name:/ {gasit=gasit + 1} gasit && /^Address:/ {print $2; exit}') #am nevoie de flag-ul gasit pt a trece peste adresa server-ului DNS fara a lua-o in considerare
+ipcheck() {
 
-if [ $verificare == $adresa ]; then
+verificare=$(nslookup $1 $3 | awk 'BEGIN {gasit=0} /^Name:/ {gasit=gasit + 1} gasit && /^Address:/ {print $2; exit}') #am nevoie de flag-ul gasit pt a trece peste adresa server-ului DNS fara a lua-o in considerare
+
+if [ $verificare == $2 ]; then
 	echo "IP match"
 else
 	echo "IP does not match"
 fi
+
+}
+
+nume_host=$1
+adresa=$2
+server_DNS=$3
+
+ipcheck "$nume_host" "$adresa" "$server_DNS"
 
 exit 0
